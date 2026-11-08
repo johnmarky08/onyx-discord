@@ -1,14 +1,14 @@
 import { GuildConfig, Team } from "../models/index.js";
 import { isStaff } from "../lib/perms.js";
 import { normalizeKey } from "../lib/names.js";
-import { notice } from "../lib/ui.js";
+import { publicNotice } from "../lib/ui.js";
 
 /** Gate for facilitator-level commands. Returns the config, or replies with an error and returns null. */
 export const requireStaff = async (interaction) => {
   const config = await GuildConfig.findOne({ guildId: interaction.guildId });
   if (!isStaff(interaction.member, config)) {
     await interaction.reply(
-      notice(
+      publicNotice(
         "error",
         "Facilitators only",
         "This command is for facilitators and server admins.",

@@ -25,6 +25,7 @@ import {
   heading,
   kv,
   notice,
+  publicNotice,
   respond,
   row,
   sep,
@@ -242,7 +243,7 @@ const rosterText = (team) =>
     .join("\n");
 
 const add = async (interaction, config) => {
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
   const { people, errors } = parseRoster(
     interaction.options.getString("members"),
   );
@@ -301,6 +302,7 @@ const add = async (interaction, config) => {
       note: team.roster.map((r) => `${r.lastName}, ${r.firstName}`).join("\n"),
     });
     refreshBoard(interaction.guild, { teamId: team._id });
+    refreshSubmissionPanel(interaction.client, interaction.guildId);
     return respond(
       interaction,
       v2(
@@ -323,7 +325,7 @@ const add = async (interaction, config) => {
             0x4ade80,
           ),
         ],
-        { ephemeral: true },
+        { ephemeral: false },
       ),
     );
   } catch (e) {
@@ -343,9 +345,9 @@ const bulkImport = async (interaction, config) => {
   const file = interaction.options.getAttachment("file");
   if (file.size > 200_000)
     return interaction.reply(
-      notice("error", "File too large", "Keep it under 200 KB."),
+      publicNotice("error", "File too large", "Keep it under 200 KB."),
     );
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
 
   let raw;
   try {
@@ -475,7 +477,7 @@ const bulkImport = async (interaction, config) => {
           failed.length ? 0xfbbf24 : 0x4ade80,
         ),
       ],
-      { ephemeral: true },
+      { ephemeral: false },
     ),
   );
 };
@@ -493,7 +495,7 @@ const releaseMember = async (guild, config, team, userId, reason) => {
 };
 
 const edit = async (interaction, config) => {
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
   const team = await findTeamByName(
     interaction.guildId,
     interaction.options.getString("name"),
@@ -501,7 +503,7 @@ const edit = async (interaction, config) => {
   if (!team)
     return respond(
       interaction,
-      notice("error", "Team not found", "Pick a team from the list."),
+      publicNotice("error", "Team not found", "Pick a team from the list."),
     );
 
   const newName = interaction.options.getString("new_name");
@@ -699,7 +701,7 @@ const edit = async (interaction, config) => {
           0xfbbf24,
         ),
       ],
-      { ephemeral: true },
+      { ephemeral: false },
     ),
   );
 };
@@ -711,7 +713,7 @@ const remove = async (interaction) => {
   );
   if (!team)
     return interaction.reply(
-      notice("error", "Team not found", "Pick a team from the list."),
+      publicNotice("error", "Team not found", "Pick a team from the list."),
     );
   return interaction.reply(
     v2(
@@ -741,7 +743,7 @@ const remove = async (interaction) => {
           0xed4245,
         ),
       ],
-      { ephemeral: true },
+      { ephemeral: false },
     ),
   );
 };
@@ -783,12 +785,13 @@ export const onTeamRemoveButton = async (interaction, action, teamId) => {
     await member.setNickname(null, "Onyx: team removed").catch(() => null);
   }
   const problems = await deleteTeamResources(interaction.guild, team);
-  await removeTeamCard(interaction.guild, team);
   await Submission.deleteMany({
     guildId: interaction.guildId,
     teamId: team._id,
   });
   await Team.deleteOne({ _id: team._id });
+  await removeTeamCard(interaction.guild, team);
+  await refreshBoard(interaction.guild);
   logEvent(interaction.guild, "team.remove", {
     user: interaction.member,
     summary: `**${team.name}** · by <@${interaction.user.id}>`,
@@ -808,7 +811,7 @@ export const onTeamRemoveButton = async (interaction, action, teamId) => {
 };
 
 const list = async (interaction, config) => {
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
   const [teams, subs] = await Promise.all([
     Team.find({ guildId: interaction.guildId }).sort({ name: 1 }),
     Submission.find({ guildId: interaction.guildId }).select("teamId type"),
@@ -863,13 +866,13 @@ const list = async (interaction, config) => {
           footer(),
         ]),
       ],
-      { ephemeral: true },
+      { ephemeral: false },
     ),
   );
 };
 
 const info = async (interaction, config) => {
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
   const team = await findTeamByName(
     interaction.guildId,
     interaction.options.getString("name"),
@@ -877,7 +880,7 @@ const info = async (interaction, config) => {
   if (!team)
     return respond(
       interaction,
-      notice("error", "Team not found", "Pick a team from the list."),
+      publicNotice("error", "Team not found", "Pick a team from the list."),
     );
   const subs = await Submission.find({
     guildId: interaction.guildId,
@@ -924,13 +927,13 @@ const info = async (interaction, config) => {
           footer(),
         ]),
       ],
-      { ephemeral: true },
+      { ephemeral: false },
     ),
   );
 };
 
 const unverify = async (interaction, config) => {
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
   const user = interaction.options.getUser("user");
   const team = await Team.findOneAndUpdate(
     { guildId: interaction.guildId, "members.userId": user.id },

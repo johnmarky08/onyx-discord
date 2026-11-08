@@ -165,7 +165,7 @@ export const wizardPayload = (d, problems = []) => {
       }),
     ),
   );
-  const payload = v2([container(children)], { ephemeral: true });
+  const payload = v2([container(children)], { ephemeral: false });
   assertWithinLimits(payload, "setup wizard");
   return payload;
 };
@@ -177,6 +177,7 @@ export const startSetup = async (interaction) => {
         "error",
         "Admins only",
         "You need the **Manage Server** permission to run setup.",
+        { ephemeral: false },
       ),
     );
   }
@@ -198,7 +199,7 @@ const expired = (interaction) =>
   update(
     interaction,
     notice("warn", "Setup session expired", "Run `/onyx setup` again.", {
-      ephemeral: true,
+      ephemeral: false,
     }),
   );
 
@@ -220,7 +221,7 @@ export const onSetupComponent = async (interaction, action) => {
     return update(
       interaction,
       notice("info", "Setup cancelled", "Nothing was changed.", {
-        ephemeral: true,
+        ephemeral: false,
       }),
     );
   }
@@ -251,7 +252,7 @@ const runDeploy = async (interaction, draft) => {
       "info",
       "Deploying…",
       "Locking permissions, posting panels and building team spaces. This can take a minute.",
-      { ephemeral: true },
+      { ephemeral: false },
     ),
     flags: MessageFlags.IsComponentsV2,
   });
@@ -331,7 +332,7 @@ const runDeploy = async (interaction, draft) => {
             warnings.length ? STYLE.warn : STYLE.ok,
           ),
         ],
-        { ephemeral: true },
+        { ephemeral: false },
       ),
       flags: MessageFlags.IsComponentsV2,
     });
@@ -342,7 +343,7 @@ const runDeploy = async (interaction, draft) => {
         "error",
         "Setup failed",
         `${e.message}\n\nNothing is broken — fix the issue and run \`/onyx setup\` again.`,
-        { ephemeral: true },
+        { ephemeral: false },
       ),
       flags: MessageFlags.IsComponentsV2,
     });

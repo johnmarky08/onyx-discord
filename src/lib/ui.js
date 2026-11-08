@@ -161,6 +161,9 @@ export const notice = (tone, title, body, { ephemeral = true } = {}) => {
   return v2([container(parts, t.color)], { ephemeral });
 };
 
+export const publicNotice = (tone, title, body) =>
+  notice(tone, title, body, { ephemeral: false });
+
 // --- Discord limits for Components V2 (checked in tests so panels never blow up in production) ---
 export const V2_LIMITS = { totalComponents: 40, totalText: 4000 };
 

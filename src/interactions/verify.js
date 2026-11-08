@@ -345,7 +345,7 @@ export const onVerifyModal = async (interaction) => {
           ],
         ],
       });
-      refreshBoard(guild, { teamId: team._id });
+      await refreshBoard(guild, { teamId: team._id });
 
       // 7. Welcome (ephemeral).
       return respond(

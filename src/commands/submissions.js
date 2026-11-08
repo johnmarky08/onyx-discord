@@ -14,7 +14,7 @@ import {
   bigSep,
   container,
   footer,
-  notice,
+  publicNotice,
   respond,
   sep,
   text,
@@ -66,7 +66,7 @@ export const execute = async (interaction) => {
   const config = await requireStaff(interaction);
   if (!config) return;
   const sub = interaction.options.getSubcommand();
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
 
   if (sub === "list") return list(interaction, config);
   if (sub === "export") return exportCsv(interaction);
@@ -88,7 +88,7 @@ const list = async (interaction, config) => {
   if (!teams.length)
     return respond(
       interaction,
-      notice("info", "No teams yet", "Nothing to show."),
+      publicNotice("info", "No teams yet", "Nothing to show."),
     );
   const done = teams.filter(
     (t) => by(t, "repository") && by(t, "presentation"),
@@ -130,7 +130,7 @@ const list = async (interaction, config) => {
           footer(),
         ]),
       ],
-      { ephemeral: true },
+      { ephemeral: false },
     ),
   );
 };
@@ -206,7 +206,7 @@ const reset = async (interaction, config) => {
   if (!team)
     return respond(
       interaction,
-      notice("error", "Team not found", "Pick a team from the list."),
+      publicNotice("error", "Team not found", "Pick a team from the list."),
     );
   const type = interaction.options.getString("type");
   const removed = await Submission.findOneAndDelete({
@@ -217,7 +217,7 @@ const reset = async (interaction, config) => {
   if (!removed)
     return respond(
       interaction,
-      notice(
+      publicNotice(
         "warn",
         "Nothing to reset",
         `**${team.name}** hasn't submitted a ${type}.`,
@@ -228,11 +228,11 @@ const reset = async (interaction, config) => {
     summary: `**${team.name}** · ${type} · by <@${interaction.user.id}>`,
     fields: [["Old link", removed.url]],
   });
-  refreshBoard(interaction.guild, { teamId: team._id });
-  refreshSubmissionPanel(interaction.client, interaction.guildId);
+  await refreshBoard(interaction.guild, { teamId: team._id });
+  await refreshSubmissionPanel(interaction.client, interaction.guildId);
   return respond(
     interaction,
-    notice(
+    publicNotice(
       "ok",
       "Submission reset",
       `**${team.name}** can submit their ${type} again.\nOld link: ${removed.url}`,

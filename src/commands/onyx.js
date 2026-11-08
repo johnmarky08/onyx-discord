@@ -1,5 +1,4 @@
 import { PermissionFlagsBits as P, SlashCommandBuilder } from "discord.js";
-import { MessageFlags } from "discord.js";
 import { EVENT } from "../config/event.js";
 import { GuildConfig, Submission, Team } from "../models/index.js";
 import { deployGuild, validateConfig } from "../lib/deploy.js";
@@ -12,7 +11,7 @@ import {
   footer,
   heading,
   kv,
-  notice,
+  publicNotice,
   respond,
   sep,
   text,
@@ -76,14 +75,14 @@ export const execute = async (interaction) => {
 const sync = async (interaction, config) => {
   if (!config.isComplete())
     return interaction.reply(
-      notice("error", "Not set up yet", "Run `/onyx setup` first."),
+      publicNotice("error", "Not set up yet", "Run `/onyx setup` first."),
     );
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
   const problems = await validateConfig(interaction.guild, config);
   if (problems.length)
     return respond(
       interaction,
-      notice(
+      publicNotice(
         "error",
         "Can't sync yet",
         problems.map((p) => `- ${p}`).join("\n"),
@@ -109,7 +108,7 @@ const sync = async (interaction, config) => {
           warnings.length ? 0xfbbf24 : 0x4ade80,
         ),
       ],
-      { ephemeral: true },
+      { ephemeral: false },
     ),
   );
 };
@@ -117,7 +116,7 @@ const sync = async (interaction, config) => {
 const deadline = async (interaction, config) => {
   if (!config.isComplete())
     return interaction.reply(
-      notice("error", "Not set up yet", "Run `/onyx setup` first."),
+      publicNotice("error", "Not set up yet", "Run `/onyx setup` first."),
     );
   const raw = interaction.options.getString("when").trim();
   const m = raw.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{1,2}):(\d{2})$/);
@@ -126,20 +125,21 @@ const deadline = async (interaction, config) => {
     : null;
   if (!date || Number.isNaN(date.getTime())) {
     return interaction.reply(
-      notice(
+      publicNotice(
         "error",
         "I couldn't read that date",
         "Use `YYYY-MM-DD HH:mm` in Philippine time, e.g. `2026-11-12 12:00`.",
       ),
     );
   }
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
   config.deadline = date;
   config.panelClosed = date.getTime() <= Date.now();
   await config.save();
   await refreshSubmissionPanel(interaction.client, interaction.guildId, {
     immediate: true,
   });
+  await refreshBoard(interaction.guild);
   logEvent(interaction.guild, "setup.deadline", {
     user: interaction.member,
     summary: `by <@${interaction.user.id}>`,
@@ -156,7 +156,7 @@ const deadline = async (interaction, config) => {
 };
 
 const status = async (interaction, config) => {
-  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+  await interaction.deferReply();
   const { guild } = interaction;
   const [teams, repos, ppts] = await Promise.all([
     Team.find({ guildId: guild.id }).select(
@@ -240,7 +240,7 @@ const status = async (interaction, config) => {
           footer(),
         ]),
       ],
-      { ephemeral: true },
+      { ephemeral: false },
     ),
   );
 };

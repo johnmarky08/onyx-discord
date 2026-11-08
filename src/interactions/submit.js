@@ -422,10 +422,11 @@ export const onSubmitConfirm = async (interaction, token) => {
       ],
     ],
   });
-  refreshBoard(guild, {
+  await refreshBoard(guild, {
     teamId: g.team._id,
     file: isFile ? { teamId: String(g.team._id), buffer: fileBuf } : null,
   });
+  await refreshSubmissionPanel(client, interaction.guildId);
   if (!isFile && g.team.textChannelId) {
     guild.channels
       .fetch(g.team.textChannelId)

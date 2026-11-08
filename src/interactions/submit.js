@@ -119,7 +119,7 @@ export const onSubmitButton = async (interaction, type) => {
         title,
         intro:
           "Upload your team's **presentation** as a **PDF or PPTX** file (max 25 MB).",
-        label: "Presentation file",
+        label: "Presentation File",
         description: "PDF or PPTX only",
       }),
     );
@@ -133,7 +133,7 @@ export const onSubmitButton = async (interaction, type) => {
       fields: [
         {
           id: "url",
-          label: "GitHub repository link",
+          label: "GitHub Repository Link",
           placeholder: "https://github.com/your-team/your-repo",
           min: 8,
           max: 400,

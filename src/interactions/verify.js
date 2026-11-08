@@ -76,7 +76,7 @@ export const onVerifyButton = async (interaction) => {
       fields: [
         {
           id: "team",
-          label: "Team name",
+          label: "Team Name",
           placeholder: "e.g. Byte Busters",
           min: 2,
           max: 60,
@@ -84,7 +84,7 @@ export const onVerifyButton = async (interaction) => {
         },
         {
           id: "last",
-          label: "Last name",
+          label: "Last Name",
           placeholder: "e.g. Dela Cruz",
           min: 1,
           max: 40,
@@ -92,7 +92,7 @@ export const onVerifyButton = async (interaction) => {
         },
         {
           id: "first",
-          label: "First name",
+          label: "First Name",
           placeholder: "e.g. Juan",
           min: 1,
           max: 40,
@@ -107,7 +107,7 @@ const spaceLine = (team) => {
   const parts = [];
   if (team.textChannelId) parts.push(`💬 <#${team.textChannelId}>`);
   if (team.voiceChannelId) parts.push(`🔊 <#${team.voiceChannelId}>`);
-  return parts.join("  ·  ");
+  return parts.join("\n");
 };
 
 const teamSpacesExist = (guild, team) =>
@@ -359,17 +359,17 @@ export const onVerifyModal = async (interaction) => {
                   avatarOf(member),
                 ),
                 bigSep(),
-                heading("🪪", "Your details"),
+                heading("🪪", "Your Details"),
                 text(
                   kv([
-                    ["Name", `${person.lastName}, ${person.firstName}`],
-                    ["Team", team.name],
-                    ["Track", team.track ? trackLabel(team.track) : ""],
-                    ["Nickname", `\`${nickname}\``],
+                    ["Name:", `${person.lastName}, ${person.firstName}`],
+                    ["Team:", team.name],
+                    ["Track:", team.track ? trackLabel(team.track) : ""],
+                    ["Nickname:", `\`${nickname}\``],
                   ]) + nickNote,
                 ),
                 sep(),
-                heading("🏠", "Your team space"),
+                heading("🏠", "Your Team Space"),
                 text(
                   `${spaceLine(team)}\n-# Only your team and the facilitators can see these channels.`,
                 ),
@@ -377,7 +377,7 @@ export const onVerifyModal = async (interaction) => {
                 heading("🧭", "What's next"),
                 text(
                   kv([
-                    ["Kickoff", ts(EVENT.kickoff), "🚀"],
+                    ["Kickoff:", ts(EVENT.kickoff), "🚀"],
                     [
                       "Submit in",
                       `<#${config.submissionChannelId}> before ${ts(config.deadline)}`,

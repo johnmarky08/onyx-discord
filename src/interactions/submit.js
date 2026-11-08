@@ -90,7 +90,7 @@ const gate = async (interaction) => {
     return {
       fail: notice(
         "error",
-        "Verify first",
+        "Verify First",
         "Only verified team members can submit. Head to the welcome channel and press **Verify**.",
       ),
     };

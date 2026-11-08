@@ -78,7 +78,7 @@ test("team card shows the github link and the attached presentation file", () =>
     "https://github.com/byte/busters",
     "https://discord.com/channels/1/2/3",
   ]);
-  assert.match(JSON.stringify(full), /Cruz, Juan/);
+  assert.match(JSON.stringify(full), /Juan Cruz/);
   assert.match(JSON.stringify(full), /3\.3 MB/);
 
   const noFile = teamCardPayload(team, [repo, ppt], { hasFile: false });

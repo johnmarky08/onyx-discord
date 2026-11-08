@@ -494,7 +494,7 @@ test("submit: validate -> confirm -> stored; teammate is then blocked", async ()
   await onSubmitConfirm(confirm, token);
   assert.equal(subs.length, 1);
   assert.equal(subs[0].url, "https://github.com/byte/busters");
-  assert.match(textOf(confirm.last), /Repository locked in/);
+  assert.match(textOf(confirm.last), /Repository Locked In!/);
   await new Promise((r) => setTimeout(r, 30)); // board refresh is fire-and-forget
   const board = g.sent.filter(([id]) => id === "ANN");
   assert.equal(board.length, 2, "board header + this team's card");
@@ -502,7 +502,7 @@ test("submit: validate -> confirm -> stored; teammate is then blocked", async ()
   assert.match(textOf(board[0][1]), /Submissions Board/);
   assert.match(textOf(board[1][1]), /Byte Busters/);
   assert.match(textOf(board[1][1]), /github\.com\/byte\/busters/);
-  assert.match(textOf(board[1][1]), /1 of 2 submitted/);
+  assert.match(textOf(board[1][1]), /1 of 2 Submitted/);
 
   // teammate tries the same item
   const mate = await submitFlow(
@@ -535,7 +535,7 @@ test("submit: validate -> confirm -> stored; teammate is then blocked", async ()
     true,
     "file stored in the team's private channel",
   );
-  assert.match(textOf(pc.last), /Presentation locked in/);
+  assert.match(textOf(pc.last), /Presentation Locked In!/);
   await new Promise((r) => setTimeout(r, 30));
   const cards = g.sent.filter(([id]) => id === "ANN");
   const last = cards[cards.length - 1][1];
@@ -546,7 +546,7 @@ test("submit: validate -> confirm -> stored; teammate is then blocked", async ()
   );
   assert.equal(last.files[0].name, "Our Deck_.pdf");
   assert.match(textOf(last), /attachment:\/\/Our Deck_\.pdf/);
-  assert.match(textOf(last), /Complete — ready for judging/);
+  assert.match(textOf(last), /Complete — Ready for Judging/);
 });
 
 test("submit: two teammates confirming at the same instant -> exactly one wins", async () => {
@@ -562,7 +562,7 @@ test("submit: two teammates confirming at the same instant -> exactly one wins",
   ]);
   assert.equal(subs.length, 1);
   const texts = [textOf(ca.last), textOf(cb.last)];
-  assert.equal(texts.filter((t) => /Repository locked in/.test(t)).length, 1);
+  assert.equal(texts.filter((t) => /Repository Locked In!/.test(t)).length, 1);
   assert.equal(
     texts.filter((t) => /already submitted the repository/.test(t)).length,
     1,
@@ -620,7 +620,7 @@ test("submit: unverified user and closed deadline are refused", async () => {
     "repository",
     "https://github.com/a/b",
   );
-  assert.match(textOf(stranger.modal.last), /Verify first/);
+  assert.match(textOf(stranger.modal.last), /Verify First/);
 
   const ok = await submitFlow(g, "u1", "repository", "https://github.com/a/b");
   cfg.deadline = new Date(Date.now() - 1000); // deadline passes between modal and confirm
@@ -692,7 +692,11 @@ test("team space: category + 1 text + 1 voice, private to the team and facilitat
     const byId = Object.fromEntries(
       ch.permissionOverwrites.map((o) => [o.id, o]),
     );
-    assert.deepEqual(byId["G"].deny, [P.ViewChannel], "@everyone cannot view");
+    assert.deepEqual(
+      byId["G"].deny,
+      [P.ViewChannel, P.UseApplicationCommands, P.UseExternalApps],
+      "@everyone cannot view",
+    );
     assert.ok(byId["ROLE1"].allow.includes(P.ViewChannel), "team can view");
     assert.ok(
       byId["FAC"].allow.includes(P.ViewChannel),

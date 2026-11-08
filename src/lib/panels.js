@@ -59,19 +59,30 @@ export const welcomePanel = () => {
         `\`3\`\u2002Receive your team nickname, roles and your team's private space`,
     ),
     text(
-      `-# Teams have ${EVENT.teamSize.min}–${EVENT.teamSize.max} members  ·  Can't verify? Ask a facilitator for help.`,
+      `-# Teams have ${EVENT.teamSize.min}–${EVENT.teamSize.max} members  ·  **Can't verify? Ask a facilitator for help.**`,
     ),
     row(
       button({
         id: IDS.verify,
-        label: "Verify me",
+        label: "Verify Me",
         emoji: "✅",
         style: ButtonStyle.Success,
       }),
     ),
   );
 
-  const payload = v2([container(children)]);
+  const payload = v2([
+    container(children),
+    container(
+      [
+        heading("🛡️", "Facilitators"),
+        text(
+          "**Need facilitator access?** Message <@651240959417516070> to get access.",
+        ),
+      ],
+      STYLE.info,
+    ),
+  ]);
   assertWithinLimits(payload, "welcome panel");
   return payload;
 };

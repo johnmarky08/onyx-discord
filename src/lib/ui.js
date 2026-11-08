@@ -108,9 +108,11 @@ export const kv = (rows) =>
     )
     .join("\n");
 
-/** ▰▰▰▱▱▱ progress bar. */
-export const bar = (done, total, len = 5) => {
-  const filled = total > 0 ? Math.round((done / total) * len) : 0;
+/** Progress bar with 5-8 segments based on the real total. */
+export const bar = (done, total) => {
+  const len = Math.min(8, Math.max(5, total > 0 ? total : 5));
+  const ratio = total > 0 ? Math.min(1, Math.max(0, done / total)) : 0;
+  const filled = Math.round(ratio * len);
   return (
     "▰".repeat(Math.min(len, filled)) + "▱".repeat(Math.max(0, len - filled))
   );

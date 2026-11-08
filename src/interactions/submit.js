@@ -515,7 +515,7 @@ export const onTeamStatus = async (interaction) => {
         container(
           [
             text(
-              `-# 📋  TEAM STATUS\n# ${g.team.name}\n${bar(done, 2, 6)}  **${done}/2** Submitted`,
+              `-# 📋  TEAM STATUS\n# ${g.team.name}\n${bar(done, 2)}  **${done}/2** Submitted`,
             ),
             bigSep(),
             heading("🗂️", "Repository"),

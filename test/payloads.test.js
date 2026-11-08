@@ -10,6 +10,7 @@ import { welcomePanel, submissionPanel, IDS } from "../src/lib/panels.js";
 import { wizardPayload } from "../src/interactions/setup.js";
 import {
   measure,
+  bar,
   notice,
   textModal,
   v2,
@@ -128,6 +129,14 @@ test("setup wizard: empty, partial, full and with problems", () => {
 test("notice cards for every tone", () => {
   for (const tone of ["ok", "warn", "error", "info"])
     validate(notice(tone, "Title", "Body"), `notice ${tone}`);
+});
+
+test("progress bars use 5-8 segments based on the real total", () => {
+  assert.equal(bar(0, 0).length, 5);
+  assert.equal(bar(1, 2).length, 5);
+  assert.equal(bar(5, 5).length, 5);
+  assert.equal(bar(5, 10).length, 8);
+  assert.equal(bar(10, 10).length, 8);
 });
 
 test("modals use Label + TextInput and validate", () => {

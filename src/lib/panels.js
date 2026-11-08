@@ -46,10 +46,9 @@ export const welcomePanel = () => {
     heading("🗓️", "Event timeline"),
     text(
       kv([
-        ["Kickoff", ts(EVENT.kickoff), "🚀"],
-        ["Code freeze & submission deadline", ts(EVENT.deadline), "🧊"],
-        ["Final pitching & awarding", ts(EVENT.pitching), "🎤"],
-        ["Venue", EVENT.venue, "📍"],
+        ["Kickoff:", ts(EVENT.kickoff), "🚀"],
+        ["Code Freeze & Submission Deadline:", ts(EVENT.deadline), "🧊"],
+        ["Final Pitching & Awarding:", ts(EVENT.pitching), "🎤"],
       ]),
     ),
     bigSep(),
@@ -101,40 +100,40 @@ export const submissionPanel = (
       [
         text(
           `-# ${closed ? "🔒  SUBMISSIONS CLOSED" : "📦  FINAL SUBMISSION"}\n` +
-            `# ${closed ? "Submissions are closed" : "Submit your work"}\n` +
+            `# ${closed ? "Submissions Are Closed" : "Submit Your Work"}\n` +
             (closed
               ? `The deadline passed ${ts(config.deadline, "R")} (${deadline}). Need help? Notify a facilitator.`
-              : `⏰ **Deadline**\u2002${deadline}\u2002(${ts(config.deadline, "R")})`),
+              : `⏰ **Deadline:**\u2002${deadline}\u2002(${ts(config.deadline, "R")})`),
         ),
         bigSep(),
         heading("🗂️", "1 · Repository"),
         text(
-          `Your team's **GitHub link** — public, or shared with the judging committee.\n` +
+          `Your team's **GitHub link** — public.\n` +
             `The \`README.md\` must fully explain the project. IoT / hardware builds are documented there too.`,
         ),
         heading("🎞️", "2 · Presentation"),
         text(
           `A **PDF or PPTX** file (max ${EVENT.presentationFile.maxMB} MB) with ${EVENT.slides.min}–${EVENT.slides.max} slides:\n` +
-            `team · problem statement · architecture / tech stack · future scalability`,
+            `Team · Problem Statement · Architecture / Tech Stack · Future Scalability`,
         ),
         bigSep(),
         heading("🛡️", "Before you submit"),
         text(
-          `▸ Any team member can submit — the **first confirmed submission of each item locks for the whole team**\n` +
-            `▸ You'll preview and confirm before anything is saved\n` +
-            `▸ Mistake or problem? **Don't resubmit — notify the facilitators**`,
+          `▸ Any team member can submit — the **first confirmed submission of each item locks for the whole team**.\n` +
+            `▸ You'll preview and confirm before anything is saved.\n` +
+            `▸ Mistake or problem? **Don't resubmit — notify the facilitators**.`,
         ),
         sep(),
         text(
           `${kv([
             [
-              "Repositories",
-              `${bar(stats.repos, stats.teams)}  **${stats.repos}/${stats.teams}** teams`,
+              "Overall Repositories:",
+              `\n${bar(stats.repos, stats.teams)}  **${stats.repos}/${stats.teams}** teams`,
               "🗂️",
             ],
             [
-              "Presentations",
-              `${bar(stats.ppts, stats.teams)}  **${stats.ppts}/${stats.teams}** teams`,
+              "Overall Presentations:",
+              `\n${bar(stats.ppts, stats.teams)}  **${stats.ppts}/${stats.teams}** teams`,
               "🎞️",
             ],
           ])}`,
@@ -142,21 +141,21 @@ export const submissionPanel = (
         row(
           button({
             id: IDS.submitRepo,
-            label: "Submit repository",
+            label: "Submit Repository",
             emoji: "🗂️",
             style: ButtonStyle.Primary,
             disabled: closed,
           }),
           button({
             id: IDS.submitPpt,
-            label: "Submit presentation",
+            label: "Submit Presentation",
             emoji: "🎞️",
             style: ButtonStyle.Primary,
             disabled: closed,
           }),
           button({
             id: IDS.teamStatus,
-            label: "My team's status",
+            label: "My Team's Status",
             emoji: "📋",
             style: ButtonStyle.Secondary,
           }),

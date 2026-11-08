@@ -5,8 +5,7 @@ export const EVENT = {
   name: "Hack4Success 2026",
   organizers: "COESC x OCTA",
   theme: "Student Around Services",
-  school: "Laguna State Polytechnic University – San Pablo City Campus",
-  venue: "Research Building",
+  school: "LSPU - SPCC",
   teamSize: { min: 3, max: 5 },
 
   // All times are Philippine time (UTC+8).

@@ -231,12 +231,12 @@ export const onSubmitModal = async (interaction, type) => {
         container(
           [
             text(
-              `-# ${LABEL[type].emoji}  ALMOST DONE\n# Confirm your ${LABEL[type].name}\nTeam **${g.team.name}**`,
+              `-# ${LABEL[type].emoji}  ALMOST DONE\n# Confirm Your ${LABEL[type].title}\nTeam **${g.team.name}**`,
             ),
             sep(),
             heading(
               LABEL[type].emoji,
-              type === "repository" ? "Your repository" : "Your file",
+              type === "repository" ? "Your Repository:" : "Your File:",
             ),
             text(shown),
             bigSep(),
@@ -338,9 +338,9 @@ export const onSubmitConfirm = async (interaction, token) => {
             [
               text(
                 `-# 🎞️  PRESENTATION SUBMITTED\n### ${g.team.name}\n${kv([
-                  ["By", submitter, "👤"],
-                  ["File", p.file.name, "📎"],
-                ])}\n-# Stored by Onyx so the judges can always find it`,
+                  ["By:", submitter, "👤"],
+                  ["File:", p.file.name, "📎"],
+                ])}\n-# Stored by Onyx so the judges can always find it.`,
               ),
               { type: C.File, file: { url: `attachment://${p.file.name}` } },
             ],
@@ -437,8 +437,8 @@ export const onSubmitConfirm = async (interaction, token) => {
                 text(
                   `-# ${LABEL[p.type].emoji}  REPOSITORY SUBMITTED\n### ${g.team.name}\n${kv(
                     [
-                      ["By", submitter, "👤"],
-                      ["Link", p.url, "🔗"],
+                      ["By:", submitter, "👤"],
+                      ["Link:", p.url, "🔗"],
                     ],
                   )}`,
                 ),
@@ -457,15 +457,15 @@ export const onSubmitConfirm = async (interaction, token) => {
         container(
           [
             text(
-              `-# ${LABEL[p.type].emoji}  SUBMITTED\n# ${LABEL[p.type].title} locked in!\nTeam **${g.team.name}**`,
+              `-# ${LABEL[p.type].emoji}  SUBMITTED SUCCESSFULLY\n# ${LABEL[p.type].title} Locked In!\nTeam **${g.team.name}**`,
             ),
             sep(),
             text(
               kv([
-                ["Submitted by", submitter, "👤"],
-                ["When", ts(new Date(), "R"), "🕒"],
+                ["Submitted by:", submitter, "👤"],
+                ["When:", ts(new Date(), "R"), "🕒"],
                 [
-                  isFile ? "File" : "Link",
+                  isFile ? "File:" : "Link:",
                   isFile ? `${p.file.name}\n${link}` : link,
                   LABEL[p.type].emoji,
                 ],
@@ -496,15 +496,15 @@ export const onTeamStatus = async (interaction) => {
     const s = get(type);
     return s
       ? kv([
-          ["Status", `submitted ${ts(s.createdAt, "R")}`, "✅"],
-          ["By", s.submittedByName ?? "a teammate", "👤"],
+          ["Status:", `Submitted ${ts(s.createdAt, "R")}`, "✅"],
+          ["By:", s.submittedByName ?? "A Teammate", "👤"],
           [
             s.fileName ? "File" : "Link",
             `${s.fileName ? `${s.fileName}\n` : ""}${s.url}`,
             LABEL[type].emoji,
           ],
         ])
-      : kv([["Status", "not submitted yet", "⏳"]]);
+      : kv([["Status:", "Not Submitted Yet", "⏳"]]);
   };
   const done = subs.length;
   const closed = isClosed(g.config);
@@ -514,16 +514,17 @@ export const onTeamStatus = async (interaction) => {
         container(
           [
             text(
-              `-# 📋  TEAM STATUS\n# ${g.team.name}\n${bar(done, 2, 8)}  **${done}/2** submitted`,
+              `-# 📋  TEAM STATUS\n# ${g.team.name}\n${bar(done, 2, 6)}  **${done}/2** Submitted`,
             ),
             bigSep(),
             heading("🗂️", "Repository"),
             text(block("repository")),
+            sep(),
             heading("🎞️", "Presentation"),
             text(block("presentation")),
             sep(),
             text(
-              `${closed ? `🔒 Closed ${ts(g.config.deadline, "R")}` : `⏰ Deadline ${ts(g.config.deadline)} (${ts(g.config.deadline, "R")})`}\n-# ${FACILITATOR_NOTE}`,
+              `${closed ? `🔒 Closed ${ts(g.config.deadline, "R")}` : `⏰ Deadline: ${ts(g.config.deadline)} (${ts(g.config.deadline, "R")})`}\n\n-# ${FACILITATOR_NOTE}`,
             ),
             footer(),
           ],

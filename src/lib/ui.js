@@ -109,7 +109,7 @@ export const kv = (rows) =>
     .join("\n");
 
 /** ▰▰▰▱▱▱ progress bar. */
-export const bar = (done, total, len = 10) => {
+export const bar = (done, total, len = 5) => {
   const filled = total > 0 ? Math.round((done / total) * len) : 0;
   return (
     "▰".repeat(Math.min(len, filled)) + "▱".repeat(Math.max(0, len - filled))

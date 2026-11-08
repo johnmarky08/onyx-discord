@@ -33,15 +33,15 @@ export const teamState = (subs) => {
     return {
       done,
       icon: "🟢",
-      label: "Complete — ready for judging",
+      label: "Complete — Ready for Judging",
       color: STYLE.ok,
     };
   if (done === 1)
-    return { done, icon: "🟡", label: "1 of 2 submitted", color: STYLE.warn };
+    return { done, icon: "🟡", label: "1 of 2 Submitted", color: STYLE.warn };
   return {
     done,
     icon: "⚪",
-    label: "Waiting for submissions",
+    label: "Waiting for Submissions",
     color: STYLE.slate,
   };
 };
@@ -54,38 +54,35 @@ export const teamCardPayload = (team, subs, { hasFile = false } = {}) => {
   const roster = team.roster?.length
     ? team.roster
         .map((r) => `${r.userId ? "✅" : "⏳"} ${r.firstName} ${r.lastName}`)
-        .join("  ·  ")
-    : "*no roster*";
+        .join("\n")
+    : "*No Roster*";
 
   const children = [
     text(
       `-# ${st.icon}  ${st.label}${team.track ? `  ·  ${trackLabel(team.track)}` : ""}\n## ${team.name}`,
     ),
-    text(`👥  ${roster}`),
+    heading("👥", `Members`),
+    text(roster),
     bigSep(),
     heading("🗂️", "Repository"),
     text(
       repo
-        ? `${kv([["Submitted", `${ts(repo.createdAt, "R")} by ${repo.submittedByName ?? "a teammate"}`, "✅"]])}\n${repo.url}`
-        : "⏳ *Waiting for the team to submit their GitHub link…*",
+        ? `${kv([["Submitted", `${ts(repo.createdAt, "R")}`, "✅"]])}\n${repo.url}`
+        : "⏳ *Waiting for the team to submit their GitHub link…*",
     ),
     sep(),
     heading("🎞️", "Presentation"),
     text(
       ppt
         ? kv([
-            [
-              "Submitted",
-              `${ts(ppt.createdAt, "R")} by ${ppt.submittedByName ?? "a teammate"}`,
-              "✅",
-            ],
+            ["Submitted", `${ts(ppt.createdAt, "R")}`, "✅"],
             [
               "File",
               `${ppt.fileName ?? "presentation"}${ppt.fileSize ? ` · ${sizeText(ppt.fileSize)}` : ""}`,
               "📎",
             ],
           ])
-        : "⏳ *Waiting for the team to upload their PDF / PPTX…*",
+        : "⏳ *Waiting for the team to upload their PDF / PPTX…*",
     ),
   ];
   if (ppt && hasFile)
@@ -97,14 +94,13 @@ export const teamCardPayload = (team, subs, { hasFile = false } = {}) => {
   const buttons = [];
   if (repo)
     buttons.push(
-      linkButton({ url: repo.url, label: "Open repository", emoji: "🔗" }),
+      linkButton({ url: repo.url, label: "Open Repository", emoji: "🔗" }),
     );
   if (ppt)
     buttons.push(
-      linkButton({ url: ppt.url, label: "Open in team chat", emoji: "💬" }),
+      linkButton({ url: ppt.url, label: "Open in Team Chat", emoji: "💬" }),
     );
   if (buttons.length) children.push(row(...buttons));
-  children.push(footer(`updated ${ts(new Date(), "R")}`));
 
   return v2([container(children, st.color)]);
 };
@@ -161,9 +157,8 @@ export const boardHeaderPayload = (config, st) => {
         sep(),
         text(
           `${closed ? "🔒 **Submissions closed**" : "⏰ **Deadline**"} ${ts(config.deadline)}${closed ? "" : `  (${ts(config.deadline, "R")})`}\n` +
-            `🟢 complete: **${st.complete}** · 🟡 partial: **${st.started}** · ⚪ waiting: **${st.waiting}**`,
+            `🟢 Complete: **${st.complete}**\n🟡 Partial: **${st.started}**\n⚪ Waiting: **${st.waiting}**`,
         ),
-        footer(`updated ${ts(new Date(), "R")}`),
       ],
       closed ? STYLE.rose : STYLE.gold,
     ),

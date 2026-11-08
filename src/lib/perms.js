@@ -82,7 +82,7 @@ export const teamOverwrites = ({
     {
       id: guild.roles.everyone.id,
       type: OverwriteType.Role,
-      deny: [P.ViewChannel],
+      deny: [P.ViewChannel, P.UseApplicationCommands, P.UseExternalApps],
     },
     { id: teamRoleId, type: OverwriteType.Role, allow: member },
     { id: guild.client.user.id, type: OverwriteType.Member, allow: BOT },

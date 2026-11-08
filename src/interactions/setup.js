@@ -69,7 +69,7 @@ export const wizardPayload = (d, problems = []) => {
     children.push(
       sep(),
       text(
-        `### ⚠️ Fix these first\n${problems.map((p) => `- ${p}`).join("\n")}`.slice(
+        `### ⚠️ Fix These First\n${problems.map((p) => `- ${p}`).join("\n")}`.slice(
           0,
           1500,
         ),

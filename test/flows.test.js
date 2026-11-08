@@ -322,7 +322,7 @@ test("verify: unknown team -> error with suggestion, nothing changes", async () 
     first: "Juan",
   });
   await onVerifyModal(i);
-  assert.match(textOf(i.last), /Team not found/);
+  assert.match(textOf(i.last), /Team not found/i);
   assert.match(textOf(i.last), /Did you mean: \*\*Byte Busters\*\*/);
   assert.equal(m.roles.added.length, 0);
 });
@@ -338,7 +338,7 @@ test("verify: a name that is not on the team's roster is refused (no impersonati
     first: "Maria",
   });
   await onVerifyModal(i);
-  assert.match(textOf(i.last), /Name not found on this team/);
+  assert.match(textOf(i.last), /Name not found on this team/i);
   assert.equal(m.roles.added.length, 0);
   assert.equal(t.members.length, 0);
 });
@@ -355,7 +355,7 @@ test("verify: a name already claimed by another account is refused", async () =>
     first: "Juan",
   });
   await onVerifyModal(i);
-  assert.match(textOf(i.last), /already claimed/);
+  assert.match(textOf(i.last), /already claimed/i);
   assert.equal(m.roles.added.length, 0);
 });
 
@@ -369,7 +369,7 @@ test("verify: someone already verified with a different team is refused", async 
     first: "Juan",
   });
   await onVerifyModal(i);
-  assert.match(textOf(i.last), /Already verified with another team/);
+  assert.match(textOf(i.last), /Already verified with another team/i);
   assert.equal(teams[1].members.length, 0);
 });
 
@@ -383,7 +383,7 @@ test("verify: role failure rolls the roster claim back", async () => {
     first: "Juan",
   });
   await onVerifyModal(i);
-  assert.match(textOf(i.last), /couldn't finish verifying/);
+  assert.match(textOf(i.last), /couldn't finish verifying/i);
   assert.equal(teams[0].members.length, 0);
   assert.equal(
     teams[0].roster[0].userId,
@@ -477,7 +477,7 @@ test("submit: validate -> confirm -> stored; teammate is then blocked", async ()
   const g = mkGuild(teams);
 
   const bad = await submitFlow(g, "u1", "repository", "https://gitlab.com/a/b");
-  assert.match(textOf(bad.modal.last), /can't be accepted/);
+  assert.match(textOf(bad.modal.last), /can't be accepted/i);
   assert.equal(bad.token, undefined);
 
   const { modal, token } = await submitFlow(
@@ -511,7 +511,7 @@ test("submit: validate -> confirm -> stored; teammate is then blocked", async ()
     "repository",
     "https://github.com/other/repo",
   );
-  assert.match(textOf(mate.modal.last), /already submitted the repository/);
+  assert.match(textOf(mate.modal.last), /already submitted the repository/i);
   assert.match(textOf(mate.modal.last), /notify the facilitators/);
   assert.equal(subs.length, 1);
 
@@ -593,7 +593,7 @@ test("submit: wrong file types / sizes / fake extensions are refused", async () 
     url: "u",
   });
   globalThis.fetch = prev;
-  assert.match(textOf(fake.modal.last), /isn't a real PDF/);
+  assert.match(textOf(fake.modal.last), /isn't a real PDF/i);
 });
 
 test("submit: a confirmation token can't be used by someone else", async () => {
@@ -607,7 +607,7 @@ test("submit: a confirmation token can't be used by someone else", async () => {
   );
   const thief = mkInteraction(g, "u2");
   await onSubmitConfirm(thief, token);
-  assert.match(textOf(thief.last), /expired/);
+  assert.match(textOf(thief.last), /expired/i);
   assert.equal(subs.length, 0);
 });
 
@@ -626,7 +626,7 @@ test("submit: unverified user and closed deadline are refused", async () => {
   cfg.deadline = new Date(Date.now() - 1000); // deadline passes between modal and confirm
   const c = mkInteraction(g, "u1");
   await onSubmitConfirm(c, ok.token);
-  assert.match(textOf(c.last), /Submissions are closed/);
+  assert.match(textOf(c.last), /Submissions are closed/i);
   assert.equal(subs.length, 0);
 
   const late = await submitFlow(g, "u1", "presentation", {
@@ -634,7 +634,7 @@ test("submit: unverified user and closed deadline are refused", async () => {
     size: 10,
     url: "u",
   });
-  assert.match(textOf(late.modal.last), /Submissions are closed/);
+  assert.match(textOf(late.modal.last), /Submissions are closed/i);
 });
 
 // =============================== TEAM SPACES ===============================

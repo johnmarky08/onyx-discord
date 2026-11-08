@@ -374,7 +374,7 @@ export const onVerifyModal = async (interaction) => {
                   `${spaceLine(team)}\n-# Only your team and the facilitators can see these channels.`,
                 ),
                 sep(),
-                heading("🧭", "What's next"),
+                heading("🧭", "What's Next"),
                 text(
                   kv([
                     ["Kickoff:", ts(EVENT.kickoff), "🚀"],

@@ -90,17 +90,17 @@ test("server events become valid log cards", async () => {
   await flush();
   const all = sent.map(text).join("\n");
   for (const needle of [
-    "Member joined",
-    "Member left",
+    "Member Joined",
+    "Member Left",
     "Byte Busters",
-    "Channel created",
-    "Channel deleted",
-    "Role created",
-    "Joined voice",
-    "Member banned",
+    "Channel Created",
+    "Channel Deleted",
+    "Role Created",
+    "Joined Voice",
+    "Member Banned",
     "spam",
-    "Invite created",
-    "Message deleted",
+    "Invite Created",
+    "Message Deleted",
     "hello",
   ]) {
     assert.ok(all.includes(needle), `missing "${needle}"`);
@@ -148,5 +148,5 @@ test("nickname and role changes by others are logged", async () => {
   );
   await flush();
   const all = sent.map(text).join("\n");
-  assert.ok(all.includes("Nickname changed") && all.includes("Roles updated"));
+  assert.ok(all.includes("Nickname Changed") && all.includes("Roles Updated"));
 });

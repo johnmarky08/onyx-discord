@@ -23,7 +23,7 @@ export const announceSubmission = async (
         container(
           [
             text(
-              `### ${isFile ? "🎞️ Presentation" : "🗂️ Repository"} submitted — ${team.name}`,
+              `### ${isFile ? "🎞️ Presentation Submitted" : "🗂️ Repository Submitted"} — ${team.name}`,
             ),
             sep(false),
             text(

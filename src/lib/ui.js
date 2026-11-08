@@ -10,6 +10,11 @@ import { STYLE } from "../config/style.js";
 
 export const text = (content) => ({ type: C.TextDisplay, content });
 
+export const titleCase = (value) =>
+  value.replace(/(^|[\s-])([a-z])/g, (_, prefix, letter) =>
+    prefix + letter.toUpperCase(),
+  );
+
 export const sep = (divider = true, spacing = SeparatorSpacingSize.Small) => ({
   type: C.Separator,
   divider,
@@ -92,11 +97,12 @@ export const footer = (extra) =>
 /** Big title with a small kicker above and an optional subtitle below. */
 export const hero = ({ kicker, title, subtitle }) =>
   text(
-    `${kicker ? `-# ${kicker}\n` : ""}# ${title}${subtitle ? `\n${subtitle}` : ""}`,
+    `${kicker ? `-# ${kicker}\n` : ""}# ${titleCase(title)}${subtitle ? `\n${subtitle}` : ""}`,
   );
 
 /** Section heading inside a card. */
-export const heading = (emoji, title) => text(`### ${emoji}\u2002${title}`);
+export const heading = (emoji, title) =>
+  text(`### ${emoji}\u2002${titleCase(title)}`);
 
 /** "▸ **Label**  value" lines. Rows with an empty value are skipped. */
 export const kv = (rows) =>
@@ -157,7 +163,7 @@ const TONES = {
 /** A tidy status card: tone-coloured accent, title, body and a quiet footer. */
 export const notice = (tone, title, body, { ephemeral = true } = {}) => {
   const t = TONES[tone] ?? TONES.info;
-  const parts = [text(`## ${t.icon}\u2002${title}`)];
+  const parts = [text(`## ${t.icon}\u2002${titleCase(title)}`)];
   if (body) parts.push(sep(false), text(body));
   parts.push(footer());
   return v2([container(parts, t.color)], { ephemeral });
@@ -212,7 +218,7 @@ export const respond = async (interaction, payload) => {
 /** Modal with a single file-upload field (Components V2 for modals). */
 export const fileModal = ({ id, title, intro, label, description }) => ({
   custom_id: id,
-  title,
+  title: titleCase(title),
   components: [
     ...(intro ? [{ type: C.TextDisplay, content: intro }] : []),
     {
@@ -233,7 +239,7 @@ export const fileModal = ({ id, title, intro, label, description }) => ({
 /** Modal built from the new "Label + TextInput" layout (Components V2 for modals). */
 export const textModal = ({ id, title, intro, fields }) => ({
   custom_id: id,
-  title,
+  title: titleCase(title),
   components: [
     ...(intro ? [{ type: C.TextDisplay, content: intro }] : []),
     ...fields.map((f) => ({

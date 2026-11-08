@@ -1,7 +1,17 @@
 // Server log: every important event, as a small aesthetic card in the log channel.
 import { GuildConfig } from "../models/index.js";
 import { STYLE } from "../config/style.js";
-import { container, sep, text, ts, v2, withThumb, avatarOf, kv } from "./ui.js";
+import {
+  container,
+  sep,
+  text,
+  titleCase,
+  ts,
+  v2,
+  withThumb,
+  avatarOf,
+  kv,
+} from "./ui.js";
 import { warn } from "./logger.js";
 
 /** Every kind of log entry: icon, title, accent colour and the group shown in the footer. */
@@ -263,7 +273,7 @@ export const buildLog = (
   { user, summary, fields = [], note, id } = {},
 ) => {
   const k = KINDS[kind] ?? KINDS.error;
-  const head = `### ${k.emoji} ${k.title}${summary ? `\n${summary}` : ""}`;
+  const head = `### ${k.emoji} ${titleCase(k.title)}${summary ? `\n${summary}` : ""}`;
   const parts = [withThumb(head, avatarOf(user))];
   const body = kv(fields);
   if (body) parts.push(sep(false), text(body));

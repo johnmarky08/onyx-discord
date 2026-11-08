@@ -43,7 +43,7 @@ export const welcomePanel = () => {
         `Four days. One idea. Build something that makes campus life better — you're in the right place.`,
     ),
     bigSep(),
-    heading("🗓️", "Event timeline"),
+    heading("🗓️", "Event Timeline"),
     text(
       kv([
         ["Kickoff:", ts(EVENT.kickoff), "🚀"],
@@ -52,7 +52,7 @@ export const welcomePanel = () => {
       ]),
     ),
     bigSep(),
-    heading("✅", "Get verified in 3 steps"),
+    heading("✅", "Get Verified In 3 Steps"),
     text(
       `\`1\`\u2002Press **Verify** below\n` +
         `\`2\`\u2002Enter your **team name** and your **name** exactly as your team registered it\n` +
@@ -128,7 +128,7 @@ export const submissionPanel = (
             `Team · Problem Statement · Architecture / Tech Stack · Future Scalability`,
         ),
         bigSep(),
-        heading("🛡️", "Before you submit"),
+        heading("🛡️", "Before You Submit"),
         text(
           `▸ Any team member can submit — the **first confirmed submission of each item locks for the whole team**.\n` +
             `▸ You'll preview and confirm before anything is saved.\n` +

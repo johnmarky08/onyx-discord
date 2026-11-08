@@ -316,7 +316,7 @@ const add = async (interaction, config) => {
               heading("👥", `Roster (${team.roster.length})`),
               text(rosterText(team)),
               sep(),
-              heading("🏠", "Team space"),
+              heading("🏠", "Team Space"),
               text(
                 `<@&${team.roleId}>\n💬 <#${team.textChannelId}>\u2002·\u2002🔊 <#${team.voiceChannelId}>`,
               ),
@@ -691,7 +691,7 @@ const edit = async (interaction, config) => {
           [
             text(`-# 🛠️  TEAM UPDATED\n# ${team.name}`),
             sep(),
-            heading("📝", "What changed"),
+            heading("📝", "What Changed"),
             text([...changes, ...notes].join("\n") || "—"),
             sep(),
             heading("👥", "Roster"),
@@ -720,7 +720,7 @@ const remove = async (interaction) => {
       [
         container(
           [
-            text(`### 🗑️ Delete team "${team.name}"?`),
+            text(`### 🗑️ Delete Team "${team.name}"?`),
             sep(),
             text(
               `This permanently deletes the team's **role, category, text and voice channels** and its **submissions**, ` +
@@ -915,7 +915,7 @@ const info = async (interaction, config) => {
           ),
           text(members),
           sep(),
-          heading("🏠", "Team space"),
+          heading("🏠", "Team Space"),
           text(
             `${team.roleId ? `<@&${team.roleId}>\n` : ""}${team.textChannelId ? `💬 <#${team.textChannelId}>` : ""}\u2002${team.voiceChannelId ? `🔊 <#${team.voiceChannelId}>` : ""}`,
           ),

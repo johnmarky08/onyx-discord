@@ -257,7 +257,8 @@ export const KINDS = {
 // ---- which channel? (cached so noisy events don't hit the database every time) ----
 const cache = new Map();
 export const invalidateLogConfig = (guildId) => cache.delete(guildId);
-const logChannelId = async (guildId) => {
+const logChannelId = async (guildId, guild) => {
+  if (guild?.logChannelId) return guild.logChannelId;
   const hit = cache.get(guildId);
   if (hit && Date.now() - hit.at < 60_000) return hit.id;
   const query = GuildConfig.findOne({ guildId });
@@ -289,6 +290,7 @@ export const buildLog = (
 
 // ---- send queue: 1 message per ~1.2s per server so bursts never hit Discord's rate limit ----
 const queues = new Map();
+let defaultDelay = 1200;
 const drain = async (guildId) => {
   const q = queues.get(guildId);
   if (!q || q.running) return;
@@ -296,7 +298,7 @@ const drain = async (guildId) => {
   while (q.items.length) {
     const { guild, payload } = q.items.shift();
     try {
-      const id = await logChannelId(guildId);
+      const id = await logChannelId(guildId, guild);
       if (id) {
         const ch = await guild.channels.fetch(id).catch(() => null);
         if (ch) await ch.send(payload);
@@ -316,7 +318,7 @@ export const logEvent = (guild, kind, data = {}) => {
     const q = queues.get(guild.id) ?? {
       items: [],
       running: false,
-      delay: 1200,
+      delay: defaultDelay,
     };
     queues.set(guild.id, q);
     if (q.items.length > 300) q.items.shift(); // never grow without bound
@@ -328,6 +330,7 @@ export const logEvent = (guild, kind, data = {}) => {
 };
 
 export const setLogDelay = (ms) => {
+  defaultDelay = ms;
   for (const q of queues.values()) q.delay = ms;
 };
 export const _queues = queues;

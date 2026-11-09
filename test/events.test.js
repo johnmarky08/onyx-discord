@@ -4,7 +4,7 @@ import { EventEmitter } from "node:events";
 import { ChannelType, ContainerBuilder } from "discord.js";
 import { GuildConfig, Team } from "../src/models/index.js";
 import { registerEventLogs } from "../src/lib/events.js";
-import { setLogDelay } from "../src/lib/logs.js";
+import { _queues, setLogDelay } from "../src/lib/logs.js";
 import { mute, memberKey } from "../src/lib/quiet.js";
 
 GuildConfig.findOne = () => Promise.resolve({ logChannelId: "LOG" });
@@ -12,17 +12,27 @@ Team.findOne = async () => ({ name: "Byte Busters" });
 
 const sent = [];
 const guild = {
-  id: "G",
+  id: "EVENT-G",
+  logChannelId: "LOG",
   memberCount: 42,
   channels: { fetch: async () => ({ send: async (m) => sent.push(m) }) },
   roles: { cache: new Map() },
 };
 const client = new EventEmitter();
-registerEventLogs(client, { messageLogs: true });
+registerEventLogs(client, {
+  messageLogs: true,
+  findTeam: async () => ({ name: "Byte Busters" }),
+});
+setLogDelay(0);
 const text = (m) => JSON.stringify(m.components);
 const flush = async () => {
   setLogDelay(0);
-  await new Promise((r) => setTimeout(r, 60));
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    await new Promise((r) => setTimeout(r, 0));
+    const queue = _queues.get(guild.id);
+    if (!queue || (!queue.running && queue.items.length === 0)) return;
+  }
+  throw new Error("Event log queue did not drain");
 };
 
 const user = {
@@ -114,7 +124,7 @@ test("server events become valid log cards", async () => {
 test("changes Onyx makes itself are not logged twice", async () => {
   sent.length = 0;
   mute("c-team");
-  mute(memberKey("G", "u1"));
+  mute(memberKey(guild.id, "u1"));
   client.emit("channelCreate", {
     guild,
     id: "c-team",

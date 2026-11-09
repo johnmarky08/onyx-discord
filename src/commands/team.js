@@ -15,7 +15,11 @@ import {
 } from "../lib/names.js";
 import { isStaff } from "../lib/perms.js";
 import { refreshSubmissionPanel } from "../lib/panels.js";
-import { deleteTeamResources, ensureTeamResources } from "../lib/teams.js";
+import {
+  countVerifiedMembers,
+  deleteTeamResources,
+  ensureTeamResources,
+} from "../lib/teams.js";
 import {
   bar,
   bigSep,
@@ -848,7 +852,7 @@ const list = async (interaction, config) => {
     lines.push(line);
     used += line.length + 1;
   }
-  const verifiedTotal = teams.reduce((n, t) => n + t.members.length, 0);
+  const verifiedTotal = countVerifiedMembers(teams);
   const rosterTotal = teams.reduce((n, t) => n + t.roster.length, 0);
   return respond(
     interaction,

@@ -139,24 +139,24 @@ export const boardHeaderPayload = (config, st) => {
           `${kv([
             [
               "Repositories",
-              `${bar(st.repos, st.total)}  **${st.repos}/${st.total}**`,
+              `\n${bar(st.repos, st.total)}  **${st.repos}/${st.total}**`,
               "🗂️",
             ],
             [
               "Presentations",
-              `${bar(st.ppts, st.total)}  **${st.ppts}/${st.total}**`,
+              `\n${bar(st.ppts, st.total)}  **${st.ppts}/${st.total}**`,
               "🎞️",
             ],
             [
-              "Teams complete",
-              `${bar(st.complete, st.total)}  **${st.complete}/${st.total}**`,
+              "Teams Complete",
+              `\n${bar(st.complete, st.total)}  **${st.complete}/${st.total}**`,
               "🏁",
             ],
           ])}`,
         ),
         sep(),
         text(
-          `${closed ? "🔒 **Submissions closed**" : "⏰ **Deadline**"} ${ts(config.deadline)}${closed ? "" : `  (${ts(config.deadline, "R")})`}\n` +
+          `${closed ? "🔒 **Submissions Closed**" : "⏰ **Deadline**"} ${ts(config.deadline)}${closed ? "" : `  (${ts(config.deadline, "R")})`}\n` +
             `🟢 Complete: **${st.complete}**\n🟡 Partial: **${st.started}**\n⚪ Waiting: **${st.waiting}**`,
         ),
       ],

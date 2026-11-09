@@ -12,6 +12,9 @@ const fetchRole = (guild, id) =>
 const fetchChannel = (guild, id) =>
   id ? guild.channels.fetch(id).catch(() => null) : null;
 
+export const countVerifiedMembers = (teams) =>
+  teams.reduce((total, team) => total + (team.members?.length ?? 0), 0);
+
 /**
  * Make sure the team has: a role, a private category, one text channel and one voice channel.
  * Safe to call repeatedly (used for /team add, /team import, /onyx sync and setup).

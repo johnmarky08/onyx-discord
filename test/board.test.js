@@ -106,7 +106,7 @@ test("board header: open and closed", () => {
     st,
   );
   valid(closed, "header closed");
-  assert.match(JSON.stringify(closed), /Submissions closed/);
+  assert.match(JSON.stringify(closed), /Submissions Closed/);
   valid(
     boardHeaderPayload(
       { deadline: new Date() },

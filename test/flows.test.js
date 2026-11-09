@@ -440,7 +440,7 @@ test("verify: two accounts racing for the same name -> exactly one wins; differe
   assert.equal(teams[0].members.length, 3);
   const cruz = results.slice(0, 2).map((i) => textOf(i.last));
   assert.equal(cruz.filter((t) => /Welcome, /.test(t)).length, 1);
-  assert.equal(cruz.filter((t) => /already claimed/.test(t)).length, 1);
+  assert.equal(cruz.filter((t) => /already claimed/i.test(t)).length, 1);
 });
 
 test("verify: re-verifying an existing member re-applies roles without a second claim", async () => {
@@ -564,7 +564,7 @@ test("submit: two teammates confirming at the same instant -> exactly one wins",
   const texts = [textOf(ca.last), textOf(cb.last)];
   assert.equal(texts.filter((t) => /Repository Locked In!/.test(t)).length, 1);
   assert.equal(
-    texts.filter((t) => /already submitted the repository/.test(t)).length,
+    texts.filter((t) => /already submitted the repository/i.test(t)).length,
     1,
   );
 });

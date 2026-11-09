@@ -20,6 +20,7 @@ import {
 } from "../lib/ui.js";
 import { logEvent } from "../lib/logs.js";
 import { refreshBoard } from "../lib/board.js";
+import { countVerifiedMembers } from "../lib/teams.js";
 import { startSetup } from "../interactions/setup.js";
 import { requireStaff } from "./_shared.js";
 
@@ -165,7 +166,7 @@ const status = async (interaction, config) => {
     Submission.countDocuments({ guildId: guild.id, type: "repository" }),
     Submission.countDocuments({ guildId: guild.id, type: "presentation" }),
   ]);
-  const participants = teams.reduce((n, t) => n + t.members.length, 0);
+  const participants = countVerifiedMembers(teams);
   const rosterTotal = teams.reduce((n, t) => n + (t.roster?.length ?? 0), 0);
   const noSpace = teams.filter(
     (t) => !(t.roleId && t.categoryId && t.textChannelId && t.voiceChannelId),

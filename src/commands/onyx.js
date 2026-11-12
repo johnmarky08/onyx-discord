@@ -11,6 +11,7 @@ import {
   footer,
   heading,
   kv,
+  notice,
   publicNotice,
   respond,
   sep,
